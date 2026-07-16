@@ -1,6 +1,5 @@
 import { listProducts } from "@lib/data/products"
 import { HttpTypes } from "@medusajs/types"
-import { Text } from "@modules/common/components/ui"
 
 import InteractiveLink from "@modules/common/components/interactive-link"
 import ProductPreview from "@modules/products/components/product-preview"
@@ -18,7 +17,7 @@ export default async function ProductRail({
     regionId: region.id,
     queryParams: {
       collection_id: collection.id,
-      fields: "*variants.calculated_price",
+      fields: "*variants.calculated_price,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder",
     },
   })
 
@@ -28,8 +27,13 @@ export default async function ProductRail({
 
   return (
     <div className="content-container py-12 small:py-24">
-      <div className="flex justify-between mb-8">
-        <Text className="txt-xlarge">{collection.title}</Text>
+      <div className="flex justify-between items-center mb-10">
+        <div>
+          <h2 className="font-serif text-2xl small:text-3xl tracking-wider text-gold-400 uppercase">
+            {collection.title}
+          </h2>
+          <div className="w-12 h-px bg-gold-400 mt-3" />
+        </div>
         <InteractiveLink href={`/collections/${collection.handle}`}>
           View all
         </InteractiveLink>

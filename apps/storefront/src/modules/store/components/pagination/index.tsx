@@ -35,8 +35,8 @@ export function Pagination({
   ) => (
     <button
       key={p}
-      className={clx("txt-xlarge-plus text-ui-fg-muted", {
-        "text-ui-fg-base hover:text-ui-fg-subtle": isCurrent,
+      className={clx("txt-xlarge-plus text-cream-200/40 hover:text-gold-400 transition-colors font-body", {
+        "text-gold-400 font-semibold": isCurrent,
       })}
       disabled={isCurrent}
       onClick={() => handlePageChange(p)}

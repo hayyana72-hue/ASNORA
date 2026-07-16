@@ -94,26 +94,13 @@ export default function ProductActions({
 
   // check if the selected variant is in stock
   const inStock = useMemo(() => {
-    // If we don't manage inventory, we can always add to cart
-    if (selectedVariant && !selectedVariant.manage_inventory) {
-      return true
-    }
+    if (!selectedVariant) return false
 
-    // If we allow back orders on the variant, we can add to cart
-    if (selectedVariant?.allow_backorder) {
-      return true
-    }
-
-    // If there is inventory available, we can add to cart
-    if (
-      selectedVariant?.manage_inventory &&
-      (selectedVariant?.inventory_quantity || 0) > 0
-    ) {
-      return true
-    }
-
-    // Otherwise, we can't add to cart
-    return false
+    return (
+      !selectedVariant.manage_inventory ||
+      selectedVariant.allow_backorder ||
+      (selectedVariant.inventory_quantity ?? 0) > 0
+    )
   }, [selectedVariant])
 
   const actionsRef = useRef<HTMLDivElement>(null)
@@ -162,6 +149,27 @@ export default function ProductActions({
 
         <ProductPrice product={product} variant={selectedVariant} />
 
+        {/* Stock Status Indicator */}
+        <div className="my-3 flex items-center gap-x-2 text-sm">
+          {selectedVariant ? (
+            inStock ? (
+              <span className="flex items-center gap-x-1.5 text-emerald-400 font-medium">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                In Stock ({selectedVariant.inventory_quantity ?? 100} units available)
+              </span>
+            ) : (
+              <span className="flex items-center gap-x-1.5 text-rose-500 font-medium">
+                <span className="h-2 w-2 rounded-full bg-rose-500" />
+                Out of Stock
+              </span>
+            )
+          ) : (
+            <span className="text-cream-200/50 italic">
+              Please select a variant to check availability
+            </span>
+          )}
+        </div>
+
         <Button
           onClick={handleAddToCart}
           disabled={
@@ -172,11 +180,11 @@ export default function ProductActions({
             !isValidVariant
           }
           variant="primary"
-          className="w-full h-10"
+          className="w-full h-12 tracking-widest font-semibold uppercase text-xs btn-gold transition-all duration-300"
           isLoading={isAdding}
           data-testid="add-product-button"
         >
-          {!selectedVariant && !options
+          {!selectedVariant
             ? "Select variant"
             : !inStock || !isValidVariant
             ? "Out of stock"
@@ -193,6 +201,32 @@ export default function ProductActions({
           show={!inView}
           optionsDisabled={!!disabled || isAdding}
         />
+
+        {/* Luxury Shipping Information Card */}
+        <div className="mt-6 p-4 rounded bg-[#F8F5EE] border border-[#D4AF37]/30 shadow-sm text-[#121212]">
+          <div className="flex items-center gap-x-2 mb-3 text-sm font-serif font-semibold tracking-wider uppercase text-[#121212] border-b border-[#D4AF37]/20 pb-2">
+            <span className="text-[#D4AF37] text-lg">🚚</span>
+            <span>Shipping Information</span>
+          </div>
+          
+          <div className="flex flex-col gap-y-3 text-xs">
+            <div className="flex justify-between items-start border-b border-[#D4AF37]/10 pb-2">
+              <div>
+                <p className="font-semibold text-sm">Standard Delivery</p>
+                <p className="text-gray-500 mt-0.5">3–5 Working Days</p>
+              </div>
+              <span className="font-bold text-sm text-[#D4AF37]">PKR 200</span>
+            </div>
+            
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="font-semibold text-sm">Express Delivery</p>
+                <p className="text-gray-500 mt-0.5">Within 24 Hours</p>
+              </div>
+              <span className="font-bold text-sm text-[#D4AF37]">PKR 350</span>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   )

@@ -112,7 +112,7 @@ const Payment = ({
   }, [isOpen])
 
   return (
-    <div className="bg-white">
+    <div>
       <div className="flex flex-row items-center justify-between mb-6">
         <Heading
           level="h2"
@@ -141,6 +141,12 @@ const Payment = ({
       </div>
       <div>
         <div className={isOpen ? "block" : "hidden"}>
+          <div className="mb-4 p-3 border border-gold-400/20 bg-gold-400/5 rounded-sm flex items-center gap-2">
+            <svg className="w-4 h-4 text-gold-400 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span className="text-xs text-gold-400 font-medium tracking-wider">Cash on Delivery Available Across Pakistan</span>
+          </div>
           {!paidByGiftcard && availablePaymentMethods?.length && (
             <>
               <RadioGroup

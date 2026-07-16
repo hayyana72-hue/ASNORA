@@ -49,11 +49,12 @@ export default async function RelatedProducts({
   return (
     <div className="product-page-constraint">
       <div className="flex flex-col items-center text-center mb-16">
-        <span className="text-base-regular text-gray-600 mb-6">
-          Related products
-        </span>
-        <p className="text-2xl-regular text-ui-fg-base max-w-lg">
-          You might also want to check out these products.
+        <h3 className="font-serif text-2xl tracking-wider text-gold-400 uppercase mb-4">
+          You May Also Love
+        </h3>
+        <div className="w-12 h-px bg-gold-400 mb-4" />
+        <p className="font-body text-sm text-cream-200/50 max-w-lg">
+          Explore more pieces from our collection that complement your style.
         </p>
       </div>
 

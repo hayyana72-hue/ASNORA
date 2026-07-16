@@ -56,13 +56,18 @@ const ShippingDetails = ({ order }: ShippingDetailsProps) => {
         >
           <Text className="txt-medium-plus text-ui-fg-base mb-1">Method</Text>
           <Text className="txt-medium text-ui-fg-subtle">
-            {(order.shipping_methods?.[0] as { name?: string })?.name} (
+            {order.shipping_methods?.[0]?.name} (
             {convertToLocale({
               amount: order.shipping_methods?.[0].total ?? 0,
               currency_code: order.currency_code,
             })}
             )
           </Text>
+          {(order.shipping_methods?.[0]?.name?.toLowerCase().includes("express") || order.shipping_methods?.[0]?.name?.toLowerCase().includes("standard")) && (
+            <Text className="text-xs text-ui-fg-muted italic mt-1">
+              Estimated Delivery: {order.shipping_methods[0].name.toLowerCase().includes("express") ? "Within 24 Hours" : "3–5 Working Days"}
+            </Text>
+          )}
         </div>
       </div>
       <Divider className="mt-8" />

@@ -14,7 +14,11 @@ import { Locale } from "@lib/data/locales"
 
 const SideMenuItems = {
   Home: "/",
-  Store: "/store",
+  Shop: "/store",
+  Collections: "/collections",
+  Bridal: "/categories/bridal",
+  About: "/about",
+  Contact: "/contact",
   Account: "/account",
   Cart: "/cart",
 }
@@ -38,15 +42,18 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
               <div className="relative flex h-full">
                 <Popover.Button
                   data-testid="nav-menu-button"
-                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base"
+                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none text-cream-200/70 hover:text-gold-400"
+                  aria-label="Open menu"
                 >
-                  Menu
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                  </svg>
                 </Popover.Button>
               </div>
 
               {open && (
                 <div
-                  className="fixed inset-0 z-[50] bg-black/0 pointer-events-auto"
+                  className="fixed inset-0 z-[50] bg-black/60 backdrop-blur-sm pointer-events-auto"
                   onClick={close}
                   data-testid="side-menu-backdrop"
                 />
@@ -55,43 +62,54 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
               <Transition
                 show={open}
                 as={Fragment}
-                enter="transition ease-out duration-150"
-                enterFrom="opacity-0"
-                enterTo="opacity-100 backdrop-blur-2xl"
-                leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 backdrop-blur-2xl"
-                leaveTo="opacity-0"
+                enter="transition ease-out duration-300"
+                enterFrom="opacity-0 -translate-x-full"
+                enterTo="opacity-100 translate-x-0"
+                leave="transition ease-in duration-200"
+                leaveFrom="opacity-100 translate-x-0"
+                leaveTo="opacity-0 -translate-x-full"
               >
-                <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-[51] inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
+                <PopoverPanel className="flex flex-col fixed w-full sm:w-[380px] h-screen z-[51] inset-y-0 left-0">
                   <div
                     data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-rounded justify-between p-6"
+                    className="flex flex-col h-full bg-luxury-black border-r border-gold-400/10 justify-between p-8"
                   >
-                    <div className="flex justify-end" id="xmark">
-                      <button data-testid="close-menu-button" onClick={close}>
-                        <XMark />
-                      </button>
+                    <div>
+                      <div className="flex justify-between items-center mb-12">
+                        <span className="font-serif text-xl tracking-[0.2em] text-gold-400 uppercase">
+                          ASNORA
+                        </span>
+                        <button
+                          data-testid="close-menu-button"
+                          onClick={close}
+                          className="text-cream-200/50 hover:text-gold-400 transition-colors"
+                          aria-label="Close menu"
+                        >
+                          <XMark className="w-6 h-6" />
+                        </button>
+                      </div>
+                      <ul className="flex flex-col gap-6 items-start justify-start">
+                        {Object.entries(SideMenuItems).map(([name, href]) => {
+                          return (
+                            <li key={name}>
+                              <LocalizedClientLink
+                                href={href}
+                                className="font-serif text-2xl tracking-wider text-cream-200/80 hover:text-gold-400 transition-colors duration-300"
+                                onClick={close}
+                                data-testid={`${name.toLowerCase()}-link`}
+                              >
+                                {name}
+                              </LocalizedClientLink>
+                            </li>
+                          )
+                        })}
+                      </ul>
                     </div>
-                    <ul className="flex flex-col gap-6 items-start justify-start">
-                      {Object.entries(SideMenuItems).map(([name, href]) => {
-                        return (
-                          <li key={name}>
-                            <LocalizedClientLink
-                              href={href}
-                              className="text-3xl leading-10 hover:text-ui-fg-disabled"
-                              onClick={close}
-                              data-testid={`${name.toLowerCase()}-link`}
-                            >
-                              {name}
-                            </LocalizedClientLink>
-                          </li>
-                        )
-                      })}
-                    </ul>
                     <div className="flex flex-col gap-y-6">
+                      <div className="luxury-divider" />
                       {!!locales?.length && (
                         <div
-                          className="flex justify-between"
+                          className="flex justify-between text-cream-200/50"
                           onMouseEnter={languageToggleState.open}
                           onMouseLeave={languageToggleState.close}
                         >
@@ -109,7 +127,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                         </div>
                       )}
                       <div
-                        className="flex justify-between"
+                        className="flex justify-between text-cream-200/50"
                         onMouseEnter={countryToggleState.open}
                         onMouseLeave={countryToggleState.close}
                       >
@@ -126,8 +144,8 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                           )}
                         />
                       </div>
-                      <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Medusa Store. All rights
+                      <Text className="txt-compact-small text-cream-200/30 font-body">
+                        © {new Date().getFullYear()} ASNORA BY AMNA NASIR. All rights
                         reserved.
                       </Text>
                     </div>

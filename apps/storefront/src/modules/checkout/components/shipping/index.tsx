@@ -152,7 +152,7 @@ const Shipping: React.FC<ShippingProps> = ({
   }, [isOpen])
 
   return (
-    <div className="bg-white">
+    <div>
       <div className="flex flex-row items-center justify-between mb-6">
         <Heading
           level="h2"
@@ -269,9 +269,16 @@ const Shipping: React.FC<ShippingProps> = ({
                           <MedusaRadio
                             checked={option.id === shippingMethodId}
                           />
-                          <span className="text-base-regular">
-                            {option.name}
-                          </span>
+                          <div className="flex flex-col">
+                            <span className="text-base-regular font-medium">
+                              {option.name}
+                            </span>
+                            {(option.type?.description || (option.name?.toLowerCase().includes("express") ? "Within 24 Hours" : option.name?.toLowerCase().includes("standard") ? "3–5 Working Days" : "")) && (
+                              <span className="text-xs text-ui-fg-muted">
+                                Estimated Delivery: {option.type?.description || (option.name?.toLowerCase().includes("express") ? "Within 24 Hours" : "3–5 Working Days")}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <span className="justify-self-end text-ui-fg-base">
                           {option.price_type === "flat" ? (
@@ -398,6 +405,11 @@ const Shipping: React.FC<ShippingProps> = ({
                     currency_code: cart?.currency_code,
                   })}
                 </Text>
+                {(cart.shipping_methods!.at(-1)!.name?.toLowerCase().includes("express") || cart.shipping_methods!.at(-1)!.name?.toLowerCase().includes("standard")) && (
+                  <Text className="text-xs text-ui-fg-muted italic">
+                    Estimated Delivery: {cart.shipping_methods!.at(-1)!.name?.toLowerCase().includes("express") ? "Within 24 Hours" : "3–5 Working Days"}
+                  </Text>
+                )}
               </div>
             )}
           </div>
